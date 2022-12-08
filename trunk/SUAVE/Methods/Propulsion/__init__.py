@@ -19,4 +19,5 @@ from . import electric_motor_sizing
 from .liquid_rocket_sizing import liquid_rocket_sizing
 from .serial_HTS_turboelectric_sizing import serial_HTS_turboelectric_sizing
 from .serial_HTS_dynamo_turboelectric_sizing import serial_HTS_dynamo_turboelectric_sizing
+from .turbojet_small_sizing import turbojet_small_sizing
 
