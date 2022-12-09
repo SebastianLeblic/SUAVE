@@ -39,13 +39,15 @@ from SUAVE.Input_Output.Results import  print_parasite_drag,  \
      print_engine_data,   \
      print_mission_breakdown, \
      print_weight_breakdown
+
+from SUAVE.Plots.Performance import plot_engine_performance
 # ----------------------------------------------------------------------
 #   Main
 # ----------------------------------------------------------------------
 
 def main():
 
-    configs, analyses = full_setup()
+    configs, analyses, vehicle = full_setup()
 
     simple_sizing(configs, analyses)
     configs.finalize()
@@ -72,7 +74,13 @@ def main():
 
     #print mission breakdown
     print_mission_breakdown(results)
-    
+
+    # print engine data
+    print_engine_data(vehicle)
+
+    # plot engine performance
+    plot_engine_performance(vehicle, units="SI")
+
     # ------------------------------------------------------------------
     #   Vehicle Definition Complete
     # ------------------------------------------------------------------
@@ -104,7 +112,7 @@ def full_setup():
     analyses.configs  = configs_analyses
     analyses.missions = missions_analyses
 
-    return configs, analyses
+    return configs, analyses, vehicle
 
 # ----------------------------------------------------------------------
 #   Define the Vehicle Analyses
