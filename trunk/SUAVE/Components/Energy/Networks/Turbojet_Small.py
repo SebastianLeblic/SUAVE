@@ -2,11 +2,10 @@
 # Turbojet_Small.py
 # 
 # Created:  Aug 2019, B. Dalman
-
-# Modified from Turbojet Super by:
+# 
 # Original: May 2015, T. MacDonald
-# Modified: Aug 2017, E. Botero
-#           Aug 2018, T. MacDonald
+# Modified: Dec 2022, Sebastian Leblic (bug fix)
+#          
 
 # ----------------------------------------------------------------------
 #  Imports
