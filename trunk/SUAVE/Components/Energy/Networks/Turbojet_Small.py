@@ -2,10 +2,11 @@
 # Turbojet_Small.py
 # 
 # Created:  Aug 2019, B. Dalman
-# 
+
+# Modified from Turbojet Super by:
 # Original: May 2015, T. MacDonald
-# Modified: Dec 2022, Sebastian Leblic (bug fix)
-#          
+# Modified: Aug 2017, E. Botero
+#           Aug 2018, T. MacDonald
 
 # ----------------------------------------------------------------------
 #  Imports
@@ -84,7 +85,6 @@ class Turbojet_Small(Network):
         	Properties Used:
         	Defaulted values
             """  	
-
         #Unpack
         conditions = state.conditions
         
@@ -101,7 +101,7 @@ class Turbojet_Small(Network):
         thrust                    = self.thrust
         number_of_engines         = self.number_of_engines        
 
-        
+
         #Creating the network by manually linking the different components
 
         #set the working fluid to determine the fluid properties
@@ -203,7 +203,12 @@ class Turbojet_Small(Network):
         results.thrust_force_vector = F
         results.vehicle_mass_rate   = mdot
         results.network_y_axis_rotation     = conditions.ones_row(1) * 0.0
-        
+        results.inlet_ram = ram.outputs
+        results.inlet_nozzle = inlet_nozzle.outputs
+        results.core_nozzle = core_nozzle.outputs
+        results.combustor = combustor.outputs
+        results.axial_turbine = axial_turbine.outputs
+
         return results
 
     def size(self,state):  

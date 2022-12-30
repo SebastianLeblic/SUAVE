@@ -1,2 +1,3 @@
 from .aero_forces import determine_alpha
+from .calc_propulsion_required import calc_propulsion_required
 from .calc_propulsion import calc_propulsion
