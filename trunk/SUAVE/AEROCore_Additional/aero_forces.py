@@ -34,11 +34,11 @@ import copy as copy
 
 
 def aero_forces(input_details, vehicle):
-    #print("\n vehicle:", vehicle.wings.main_wing.areas.reference)
+    
     #unpack
     wing_area = vehicle.wings.main_wing.areas.reference
     d_isa = input_details.d_isa
-    aero_map = construct_aero_map(input_details)
+    aero_map = input_details.aero_map
     altitude = input_details.altitude
     mass = vehicle.mass_properties.takeoff
 
@@ -178,6 +178,7 @@ def aero_forces(input_details, vehicle):
     else:
         aero_results = Data()
         aero_results.aero_force_set = aero_force_set
+        aero_results.speed = speed
         
     return aero_results
 
@@ -293,8 +294,7 @@ def construct_aero_map(input_details):
 
     aero_file = input_details.aero_file
 
-    plotting = input_details.plotting
-    #plotting = True
+    plotting = input_details.aero_plotting
     
     data_array = np.loadtxt(aero_file)
     xy = data_array[:, 0:2]

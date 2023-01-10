@@ -93,21 +93,27 @@ def calc_propulsion(vehicle, input_details):
     state.conditions.propulsion.throttle = np.array(np.atleast_1d(1.))        
     max_thrust_results = vehicle.networks.turbojet_small.evaluate_thrust(state)
     max_thrust = max_thrust_results.thrust_force_vector[0][0]
-    max_fuel_flow = max_thrust_results.vehicle_mass_rate
+    max_fuel_flow = max_thrust_results.fuel_flow_rate
 
     # find thrust output parameters
     state.conditions.propulsion.throttle = np.array(np.atleast_1d(throttle))        
     thrust_results = vehicle.networks.turbojet_small.evaluate_thrust(state)
+    print("\n thrust_results:", thrust_results)
     thrust = thrust_results.thrust_force_vector[0][0]
     epsilon = thrust / max_thrust
     
+    
     # fuel flow rate adjusted to provide more realistic results. (B. Dalman, eq 4.12)
     fuel_flow_rate = max_fuel_flow * 0.071 * np.exp(2.651 * (np.log(epsilon) - np.log(0.012)) / 4.473)
+    #print("\n fuel_flow_rate:", fuel_flow_rate)
+    #print("\n fuel_to_air_ratio:", thrust_results.combustor.fuel_to_air_ratio)
+    mdot_air = fuel_flow_rate / thrust_results.combustor.fuel_to_air_ratio
 
     propulsion_results = Data()
     propulsion_results.throttle = throttle
-    propulsion_results.TSFC = (fuel_flow_rate / 1000) / (thrust / 1000)
+    propulsion_results.TSFC = (fuel_flow_rate * 1000) / (thrust / 1000)
     propulsion_results.thrust = thrust
+    propulsion_results.mass_air_flow_rate = mdot_air
     propulsion_results.fuel_flow_rate = fuel_flow_rate
     propulsion_results.inlet_ram = thrust_results.inlet_ram
     propulsion_results.inlet_nozzle = thrust_results.inlet_nozzle
@@ -117,4 +123,6 @@ def calc_propulsion(vehicle, input_details):
     propulsion_results.max_thrust = max_thrust
     propulsion_results.speed_of_sound = a
 
-    return propulsion_results
+    konditions = copy.deepcopy(state.conditions.freestream)
+
+    return propulsion_results, konditions

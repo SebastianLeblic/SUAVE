@@ -95,7 +95,7 @@ def calc_propulsion_required(thrust_requirements, vehicle, input_details):
     state.conditions.propulsion.throttle = np.array(np.atleast_1d(1.))        
     max_thrust_results = vehicle.networks.turbojet_small.evaluate_thrust(state)
     max_thrust = max_thrust_results.thrust_force_vector[0][0]
-    max_fuel_flow = max_thrust_results.vehicle_mass_rate
+    max_fuel_flow = max_thrust_results.fuel_flow_rate
 
     # find thrust output parameters
     while delta_thrust > 1e-10:
@@ -123,7 +123,7 @@ def calc_propulsion_required(thrust_requirements, vehicle, input_details):
         else:
             propulsion_results = Data()
             propulsion_results.throttle = throttle_guess
-            propulsion_results.TSFC = (fuel_flow_rate / 1000) / (thrust / 1000)
+            propulsion_results.TSFC = (fuel_flow_rate * 1000) / (thrust / 1000)
             propulsion_results.thrust = thrust
             propulsion_results.fuel_flow_rate = fuel_flow_rate
 
