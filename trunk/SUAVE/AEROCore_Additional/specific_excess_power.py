@@ -1,8 +1,8 @@
 # specific_excess_power.py
 # 
 # Created:  Jan 2023, Sebastian Leblic
-# Modified: 
-#           
+# Modified:
+# 
 #           
 #           
 #           
@@ -17,11 +17,7 @@ Inputs:
 Outputs:
     - Specific excess power map for a range of altitudes and Mach
     - Max acheivable Mach number, and at what altitude
-
-Extra info:
-    - Code takes 49.66 s to complete at 10x10 search grid
-    - Code takes approx 77 minutes to complete at 100x100 search grid
-    -  
+  
 """
 
 # ----------------------------------------------------------------------
@@ -164,7 +160,6 @@ def specific_excess_power(vehicle, input_details, alt_range, mach_range):
         
 
 def plotting_Ps(vehicle, alt_vec, mach_vec, Ps_details, save_plots, smoothing):
-    print("\n max(mach_vec):", max(mach_vec))
 
     # unpack
     if smoothing:

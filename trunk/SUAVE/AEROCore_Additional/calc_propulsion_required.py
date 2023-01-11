@@ -4,7 +4,7 @@
 # Created: June 20, 2022 - S. Leblic
 # Last modified: 
 #           - Dec, 2022 - S. Leblic
-#
+#           - Jan, 2023 - S. Leblic
 #
 
 """
@@ -25,10 +25,10 @@ Outputs:
 import SUAVE
 from SUAVE.Core import Units, Data
 import numpy as np
-import pylab as plt
 import copy as copy
 
 def calc_propulsion_required(thrust_requirements, vehicle, input_details):
+    
     # unpack
     altitude = input_details.altitude
     d_isa = input_details.d_isa

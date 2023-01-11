@@ -8,11 +8,12 @@
 #
 
 """
-Takes thrust required and outputs propulsion parameters to meet thrust needed.
+Calculates propulsion parameters for a given speed and altitude.
 
 Inputs:
-    - thrust_required   [N]
-    - throttle_guess    [%] (initial throttle position estimate)
+    - SUAVE vehicle description
+    - altitude          [m]
+    - mach              []
 
 Outputs:
     - throttle          [%]
@@ -41,7 +42,6 @@ def calc_propulsion(vehicle, input_details):
     mach = input_details.mach
 
     # initialize
-    delta_thrust = 500
     sea_level_gravity = SUAVE.Attributes.Planets.Earth().sea_level_gravity
     planet = SUAVE.Attributes.Planets.Earth()
     atmo = SUAVE.Analyses.Atmospheric.US_Standard_1976()
@@ -98,15 +98,12 @@ def calc_propulsion(vehicle, input_details):
     # find thrust output parameters
     state.conditions.propulsion.throttle = np.array(np.atleast_1d(throttle))        
     thrust_results = vehicle.networks.turbojet_small.evaluate_thrust(state)
-    print("\n thrust_results:", thrust_results)
     thrust = thrust_results.thrust_force_vector[0][0]
     epsilon = thrust / max_thrust
     
     
     # fuel flow rate adjusted to provide more realistic results. (B. Dalman, eq 4.12)
     fuel_flow_rate = max_fuel_flow * 0.071 * np.exp(2.651 * (np.log(epsilon) - np.log(0.012)) / 4.473)
-    #print("\n fuel_flow_rate:", fuel_flow_rate)
-    #print("\n fuel_to_air_ratio:", thrust_results.combustor.fuel_to_air_ratio)
     mdot_air = fuel_flow_rate / thrust_results.combustor.fuel_to_air_ratio
 
     propulsion_results = Data()

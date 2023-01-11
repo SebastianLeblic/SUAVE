@@ -4,7 +4,7 @@
 # Created: June 20, 2022 - S. Leblic
 # Last modified: 
 #           - Dec, 2022 - S. Leblic
-#
+#           - Jan, 2023 - S. Leblic
 #
 
 """
@@ -25,11 +25,11 @@ To-do items:
 """
 # imports
 import SUAVE
-from SUAVE.Core import Units, Data
+from SUAVE.Core         import Units, Data
 import numpy as np
 import pylab as plt
-from sklearn import gaussian_process
-from scipy.optimize import curve_fit
+from sklearn            import gaussian_process
+from scipy.optimize     import curve_fit
 import copy as copy
 
 
@@ -75,6 +75,9 @@ def aero_forces(input_details, vehicle):
         if aoa_test == 100:
             aero_force_set = 1
             delta_thrust = 0
+            throttle_guess = 0
+            thrust_total = 0
+            aoa = 0
         
         else:
             Thrust1 = 0
@@ -128,7 +131,6 @@ def aero_forces(input_details, vehicle):
                 thrust_total = (Thrust1 + Thrust2) / 2
 
                 throttle_guess = thrust_total / thrust_available
-                
                 delta_thrust = np.absolute(thrust_total - thrust_temp)
                 
                 thrust_temp = thrust_total
@@ -137,9 +139,11 @@ def aero_forces(input_details, vehicle):
                 if thrust_total > thrust_available:
                     aero_force_set = 2
                     delta_thrust = 0
+                    aoa = aoa_test / Units.deg
                 elif thrust_total < min_thrust:
                     aero_force_set = 3
                     delta_thrust = 0
+                    aoa = aoa_test / Units.deg
                 else:
                     aero_force_set = 0
                     lift = 0.5 * cl_test * wing_area * density * (speed ** 2)
@@ -159,8 +163,6 @@ def aero_forces(input_details, vehicle):
         
         mass_lifted = lift/gravity
 
-        # setting initial guess for throttle to determine actual available thrust
-            
         aero_results = Data()
         aero_results.throttle = throttle_guess
         aero_results.thrust_total = thrust_total
@@ -179,6 +181,9 @@ def aero_forces(input_details, vehicle):
         aero_results = Data()
         aero_results.aero_force_set = aero_force_set
         aero_results.speed = speed
+        aero_results.throttle = throttle_guess
+        aero_results.thrust_total = thrust_total
+        aero_results.aoa = aoa
         
     return aero_results
 

@@ -1,4 +1,5 @@
-from .aero_forces import determine_alpha
+from .aero_forces import aero_forces
 from .calc_propulsion_required import calc_propulsion_required
 from .calc_propulsion import calc_propulsion
 from .specific_excess_power import specific_excess_power
+from .max_mach_at_alt import max_mach_at_alt
