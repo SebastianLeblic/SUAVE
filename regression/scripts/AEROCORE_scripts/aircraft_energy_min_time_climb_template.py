@@ -12,7 +12,7 @@
 
 TEMPLATE FILE
 
-Setup file to find energy optimal minimum time-to-climb trajectory for given aricraft.
+Setup file to find energy optimal minimum time-to-climb trajectory for given aricraft with constant mass.
 
 Plots specific excess power map with overlaid trajectory.
 
