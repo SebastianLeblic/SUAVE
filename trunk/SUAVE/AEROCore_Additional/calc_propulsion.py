@@ -72,8 +72,6 @@ def calc_propulsion(vehicle, input_details):
     ref_length = vehicle.fuselages.fuselage.lengths.total
     reynolds_number = rho * speed * ref_length / mu
 
-    # adjust thrust intake speed to angle of incidence with freestream
-
     state = Data()
     state.conditions = SUAVE.Analyses.Mission.Segments.Conditions.Aerodynamics()
     state.numerics = SUAVE.Analyses.Mission.Segments.Conditions.Numerics()
