@@ -1,6 +1,6 @@
 # max_mach_at_alt_setup_template.py
 #
-# Created: Jan 2023, S. Leblic
+# Created: Jan 2023, S. Leblic (AEROCore Labs)
 #
 # Modified:
 #
@@ -9,6 +9,8 @@
 #
 
 """
+
+TEMPLATE FILE
 
 Finds maximum mach for a given aircraft at a given altitude.
 
@@ -61,7 +63,6 @@ def main():
     
     # settings
     alt = SET_ALTITUDE_HERE # units [m], set altitude to be assessed here.
-    error = 1e-7
 
     # initialize 
     input_details = Data()
