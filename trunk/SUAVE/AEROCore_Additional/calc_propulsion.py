@@ -1,7 +1,7 @@
 # @ingroup SUAVE-AEROCore_additional
 # calc_propulsion.py
 #
-# Created: Dec 22, 2022 - S. Leblic
+# Created: Dec 22, 2022 - S. Leblic (AEROCore Labs)
 # Last modified: 
 #     
 #
