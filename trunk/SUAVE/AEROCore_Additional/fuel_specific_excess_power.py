@@ -1,6 +1,7 @@
-# specific_excess_power.py
+# fuel_specific_excess_power.py
 # 
 # Created:  Jan 2023, S. Leblic (AEROCore Labs)
+# 
 # Modified:
 # 
 #           
@@ -43,28 +44,28 @@ from SUAVE.AEROCore_Additional.aero_forces import construct_aero_map
 from SUAVE.AEROCore_Additional.calc_propulsion_required import calc_propulsion_required
 
 
-
-def specific_excess_power_range(vehicle, input_details, alt_range, mach_range, aero_map_const=False):
+def fuel_specific_excess_power_range(vehicle, input_details, alt_range, mach_range, aero_map_const=False):
 
     # unpack
     alt_vec = alt_range
     mach_vec = mach_range
 
     # initializing
-    Ps_details = Data()
-    Ps_details.P_s = []
-    Ps_details.aoa = []
-    Ps_details.thrust = []
-    Ps_details.TSFC = []
-    Ps_details.fuel_flow_rate = []
-    Ps_details.E_w = []
+    FPs_details = Data()
+    FPs_details.FP_s = []
+    FPs_details.aoa = []
+    FPs_details.thrust = []
+    FPs_details.TSFC = []
+    FPs_details.fuel_flow_rate = []
+    FPs_details.E_w = []
 
     # constructing aero map
     if aero_map_const:
+        print("\nAERO_MAP_CONST")
         input_details.aero_map = construct_aero_map(input_details)
 
-    # P_s is specific power
-    P_s = np.zeros(len(mach_vec))
+    # FP_s is fuel specific power
+    FP_s = np.zeros(len(mach_vec))
     aoa = np.zeros(len(mach_vec))
     thrust = np.zeros(len(mach_vec))
     TSFC = np.zeros(len(mach_vec))
@@ -74,7 +75,6 @@ def specific_excess_power_range(vehicle, input_details, alt_range, mach_range, a
     mass = 0
     speed = 0
     gravity = 0
-    max_mach = 0
 
     # iterate through range of altitude and mach to get specific power
     for i, alt in enumerate( alt_vec ):
@@ -107,29 +107,23 @@ def specific_excess_power_range(vehicle, input_details, alt_range, mach_range, a
                 gravity = aero_force_results.gravity
                 mass = vehicle.mass_properties.takeoff
 
-            
-                P_s[j] = ((max_thrust_available - aero_force_results.drag) * speed) / (mass * gravity)
+
                 aoa[j] = aero_force_results.aoa
                 thrust[j] = propulsion_results.thrust
                 TSFC[j] = propulsion_results.TSFC
                 fuel_flow_rate[j] = propulsion_results.fuel_flow_rate
-
-                if P_s[j] < 0:
-                    P_s[j] = 0
+                FP_s[j] = ((max_thrust_available - aero_force_results.drag) * speed) / ((mass * gravity) * TSFC[j])
+                
+                if FP_s[j] < 0:
+                    FP_s[j] = 0
                     aoa[j] = 0
                     thrust[j] = 0
                     TSFC[j] = 0
                     fuel_flow_rate[j] = 0
-              
-                # finding point of maximimum mach. This should be where specific power = 0 at a given altitude.
-                if P_s[j] < 50 and P_s[j] >= 0 and mach > 0.8:
-                    if mach > max_mach:
-                        max_mach = mach
-                        max_mach_alt = alt
 
             else:
 
-                P_s[j] = 0
+                FP_s[j] = 0
                 aoa[j] = 0
                 thrust[j] = 0
                 TSFC[j] = 0
@@ -142,42 +136,35 @@ def specific_excess_power_range(vehicle, input_details, alt_range, mach_range, a
             E_w[j] = (PE + KE) / (mass * gravity)
 
 
-        Ps_details.P_s.append(P_s.copy())
-        Ps_details.aoa.append(aoa.copy())
-        Ps_details.thrust.append(thrust.copy())
-        Ps_details.TSFC.append(TSFC.copy())
-        Ps_details.fuel_flow_rate.append(fuel_flow_rate.copy())
-        Ps_details.E_w.append(E_w.copy())
-
-    Ps_details.max_mach = max_mach
-    Ps_details.max_mach_alt = max_mach_alt
+        FPs_details.FP_s.append(FP_s.copy())
+        FPs_details.aoa.append(aoa.copy())
+        FPs_details.thrust.append(thrust.copy())
+        FPs_details.TSFC.append(TSFC.copy())
+        FPs_details.fuel_flow_rate.append(fuel_flow_rate.copy())
+        FPs_details.E_w.append(E_w.copy())
     
-    return Ps_details
-        
+    return FPs_details
 
-
-def specific_excess_power_single_alt(vehicle, input_details, alt, mach_range, aero_map_const=False):
+def fuel_specific_excess_power_single_alt(vehicle, input_details, alt, mach_range):
     
     # unpack
     mach_vec = mach_range
     input_details.altitude = alt
     
     # initializing
-    Ps_details = Data()
-    Ps_details.P_s = []
-    Ps_details.aoa = []
-    Ps_details.thrust = []
-    Ps_details.TSFC = []
-    Ps_details.fuel_flow_rate = []
-    Ps_details.E_w = []
+    FPs_details = Data()
+    FPs_details.FP_s = []
+    FPs_details.aoa = []
+    FPs_details.thrust = []
+    FPs_details.TSFC = []
+    FPs_details.fuel_flow_rate = []
+    FPs_details.E_w = []
 
     # constructing aero map
-    if aero_map_const:
-        print("\nconstructing aero map")
-        input_details.aero_map = construct_aero_map(input_details)
+    input_details.aero_map = construct_aero_map(input_details)
 
     # P_s is specific power
-    P_s = np.zeros(len(mach_vec))
+    FP_s = np.zeros(len(mach_vec))
     aoa = np.zeros(len(mach_vec))
     thrust = np.zeros(len(mach_vec))
     TSFC = np.zeros(len(mach_vec))
@@ -213,17 +200,16 @@ def specific_excess_power_single_alt(vehicle, input_details, alt, mach_range, ae
             max_thrust_available = propulsion_results.max_thrust
             speed = aero_force_results.speed
             gravity = aero_force_results.gravity
-            mass = vehicle.mass_properties.takeoff
-
-        
-            P_s[j] = ((max_thrust_available - aero_force_results.drag) * speed) / (mass * gravity)
+            mass = vehicle.mass_properties.takeoff        
+            
             aoa[j] = aero_force_results.aoa
             thrust[j] = propulsion_results.thrust
             TSFC[j] = propulsion_results.TSFC
             fuel_flow_rate[j] = propulsion_results.fuel_flow_rate
+            FP_s[j] = ((max_thrust_available - aero_force_results.drag) * speed) / ((mass * gravity) * TSFC[j])
 
-            if P_s[j] < 0:
-                P_s[j] = 0
+            if FP_s[j] < 0:
+                FP_s[j] = 0
                 aoa[j] = 0
                 thrust[j] = 0
                 TSFC[j] = 0
@@ -231,7 +217,7 @@ def specific_excess_power_single_alt(vehicle, input_details, alt, mach_range, ae
 
         else:
 
-            P_s[j] = 0
+            FP_s[j] = 0
             aoa[j] = 0
             thrust[j] = 0
             TSFC[j] = 0
@@ -244,37 +230,36 @@ def specific_excess_power_single_alt(vehicle, input_details, alt, mach_range, ae
         E_w[j] = (PE + KE) / (mass * gravity)
 
 
-    Ps_details.P_s.append(P_s.copy())
-    Ps_details.aoa.append(aoa.copy())
-    Ps_details.thrust.append(thrust.copy())
-    Ps_details.TSFC.append(TSFC.copy())
-    Ps_details.fuel_flow_rate.append(fuel_flow_rate.copy())
-    Ps_details.E_w.append(E_w.copy())
+    FPs_details.FP_s.append(FP_s.copy())
+    FPs_details.aoa.append(aoa.copy())
+    FPs_details.thrust.append(thrust.copy())
+    FPs_details.TSFC.append(TSFC.copy())
+    FPs_details.fuel_flow_rate.append(fuel_flow_rate.copy())
+    FPs_details.E_w.append(E_w.copy())
     
-    return Ps_details
+    return FPs_details
 
-
-def specific_excess_power_single_point(vehicle, input_details, alt, mach, aero_map_const=False):
+def fuel_specific_excess_power_single_point(vehicle, input_details, alt, mach, aero_map_const=False):
     
     # unpack
     input_details.altitude = alt 
     input_details.mach = mach
 
     # initializing
-    Ps_details = Data()
-    Ps_details.P_s = 0
-    Ps_details.aoa = 0
-    Ps_details.thrust = 0
-    Ps_details.TSFC = 0
-    Ps_details.fuel_flow_rate = 0
-    Ps_details.E_w = 0
+    FPs_details = Data()
+    FPs_details.FP_s = 0
+    FPs_details.aoa = 0
+    FPs_details.thrust = 0
+    FPs_details.TSFC = 0
+    FPs_details.fuel_flow_rate = 0
+    FPs_details.E_w = 0
     
     # constructing aero map
     if aero_map_const:
         input_details.aero_map = construct_aero_map(input_details)
 
-    # P_s is specific power
-    P_s = 0
+    # FP_s is fuel specific power
+    FP_s = 0
     aoa = 0
     thrust = 0
     TSFC = 0
@@ -306,16 +291,15 @@ def specific_excess_power_single_point(vehicle, input_details, alt, mach, aero_m
         speed = aero_force_results.speed
         gravity = aero_force_results.gravity
         mass = vehicle.mass_properties.takeoff
-
-    
-        P_s = ((max_thrust_available - aero_force_results.drag) * speed) / (mass * gravity)
+        
         aoa = aero_force_results.aoa
         thrust = propulsion_results.thrust
         TSFC = propulsion_results.TSFC
         fuel_flow_rate = propulsion_results.fuel_flow_rate
+        FP_s = ((max_thrust_available - aero_force_results.drag) * speed) / ((mass * gravity) * TSFC)
 
-        if P_s < 0:
-            P_s = 0
+        if FP_s < 0:
+            FP_s = 0
             aoa = 0
             thrust = 0
             TSFC = 0
@@ -323,7 +307,7 @@ def specific_excess_power_single_point(vehicle, input_details, alt, mach, aero_m
 
     else:
 
-        P_s = 0
+        FP_s = 0
         aoa = 0
         thrust = 0
         TSFC = 0
@@ -336,11 +320,11 @@ def specific_excess_power_single_point(vehicle, input_details, alt, mach, aero_m
     E_w = (PE + KE) / (mass * gravity)
 
 
-    Ps_details.P_s = P_s
-    Ps_details.aoa = aoa
-    Ps_details.thrust = thrust
-    Ps_details.TSFC = TSFC
-    Ps_details.fuel_flow_rate = fuel_flow_rate
-    Ps_details.E_w = E_w
+    FPs_details.FP_s = FP_s
+    FPs_details.aoa = aoa
+    FPs_details.thrust = thrust
+    FPs_details.TSFC = TSFC
+    FPs_details.fuel_flow_rate = fuel_flow_rate
+    FPs_details.E_w = E_w
     
-    return Ps_details
+    return FPs_details

@@ -1,6 +1,6 @@
 # max_mach_at_alt.py
 #
-# Created: Jan 2023, S. Leblic
+# Created: Jan 2023, S. Leblic (AEROCore Labs)
 #
 # Modified:
 #

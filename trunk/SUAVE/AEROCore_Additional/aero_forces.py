@@ -1,7 +1,7 @@
 # @ingroup SUAVE-AEROCore_additional
 # aero_forces.py
 #
-# Created: June 20, 2022 - S. Leblic
+# Created: June 20, 2022 - S. Leblic (AEROCore Labs)
 # Last modified: 
 #           - Dec, 2022 - S. Leblic
 #           - Jan, 2023 - S. Leblic
@@ -361,6 +361,19 @@ def construct_aero_map(input_details):
         plt.show()
 
         # Stub for plotting drag if implemented:
+        mappable = plt.cm.ScalarMappable(cmap=plt.cm.viridis)
+        mappable.set_array(CD_sur)
+        fig = plt.figure('Coefficient of Drag Surrogate Plot')
+        plt_handle = plt.contourf(
+            AoA_mesh/Units.deg, mach_mesh, CD_sur, levels=25)
+        plt.scatter(xy[:, 0]/Units.deg, xy[:, 1])
+        cbar = plt.colorbar(mappable)
+        plt.xlabel('Angle of Attack (deg)')
+        plt.ylabel('Mach Number')
+        cbar.ax.set_ylabel('Coefficient of Drag')
+
+        plt.show()
+
         mappable = plt.cm.ScalarMappable(cmap=plt.cm.viridis)
         mappable.set_array(CD_sur)
         fig = plt.figure('Coefficient of Drag Surrogate Plot')

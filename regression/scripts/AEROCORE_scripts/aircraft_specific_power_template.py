@@ -1,13 +1,15 @@
 # aircaft_specific_power_template.py
 # 
-# Created:  Jan 2023, Sebastian Leblic
-# Modified: 
-#           
+# Created:  Jan 2023, S. Leblic (AEROCore Labs)
+# 
+# Modified:           
 #           
 #           
 #           
 
 """
+
+TEMPLATE FILE
 
 Assesses the specific excess power of a given aircraft for a range of speeds and altitudes. Inherently a performance envelope is created, where max Mach can be determined. This further acts as a first step to developing an energy based approach to optimal trajectory mapping.
 
