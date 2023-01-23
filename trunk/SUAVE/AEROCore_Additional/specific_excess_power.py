@@ -38,8 +38,8 @@ from scipy.ndimage.filters import gaussian_filter
 # More basic SUAVE function
 from SUAVE.Core import Data
 
-from SUAVE.AEROCore_Additional.aero_forces import aero_forces
-from SUAVE.AEROCore_Additional.aero_forces import construct_aero_map
+from SUAVE.AEROCore_Additional.aero_forces_steady_state import aero_forces_steady_state
+from SUAVE.AEROCore_Additional.aero_forces_steady_state import construct_aero_map
 from SUAVE.AEROCore_Additional.calc_propulsion_required import calc_propulsion_required
 
 

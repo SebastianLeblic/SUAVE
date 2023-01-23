@@ -50,7 +50,7 @@ filepath = path.abspath(path.join(basepath, "..", "Vehicles"))
 sys.path.append(filepath)
 from VEHICLE_NAME_HERE import vehicle_setup   # indicate vehicle name as SUAVE vehicle file name from "Vehicles" folder
 
-from SUAVE.AEROCore_Additional.specific_excess_power import specific_excess_power
+from SUAVE.AEROCore_Additional.specific_excess_power import specific_excess_power_range
 
 # ----------------------------------------------------------------------
 #   Main
@@ -80,7 +80,7 @@ def main():
     input_details.d_isa = 0                 # for propulsion calcs - set temperature deviation from standard temp setting (default 298.15 K)
 
     # call function to formulate specific excess power map
-    P_s_details = specific_excess_power(vehicle, input_details, alt_range, mach_range)
+    P_s_details = specific_excess_power_range(vehicle, input_details, alt_range, mach_range)
 
     # print details of point of maximum acheivable Mach
     print("\n max_mach:", P_s_details.max_mach)
