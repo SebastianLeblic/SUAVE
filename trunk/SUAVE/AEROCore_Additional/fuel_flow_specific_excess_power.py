@@ -90,7 +90,7 @@ def fuel_flow_specific_excess_power(vehicle, input_details, alt_range, mach_rang
                 vehicle.networks.turbojet_small.inlet_nozzle.compressibility_effects = True
 
             # calling steady state aero/thrust force balance calculation
-            aero_force_results = aero_forces(input_details, vehicle)
+            aero_force_results = aero_forces_steady_state(input_details, vehicle)
 
             # if force-balance converged properly, aero_force_set = 0 then propulsion parameters are calculated to meet thrust required from aero-thrust force balance.
             if aero_force_results.aero_force_set == 0:

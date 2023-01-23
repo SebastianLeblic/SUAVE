@@ -70,7 +70,7 @@ def max_mach_at_alt(input_details, vehicle):
             vehicle.networks.turbojet_small.inlet_nozzle.compressibility_effects = True
 
         input_details.mach = mach_middle
-        aero_results = aero_forces(input_details, vehicle)
+        aero_results = aero_forces_steady_state(input_details, vehicle)
         
         thrust_requirements = Data()
         thrust_requirements.throttle = aero_results.throttle

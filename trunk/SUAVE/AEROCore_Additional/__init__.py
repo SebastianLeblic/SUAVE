@@ -1,4 +1,4 @@
-from .aero_forces import aero_forces
+from .aero_forces_steady_state import aero_forces_steady_state
 from .calc_propulsion_required import calc_propulsion_required
 from .calc_propulsion import calc_propulsion
 from .specific_excess_power import *
