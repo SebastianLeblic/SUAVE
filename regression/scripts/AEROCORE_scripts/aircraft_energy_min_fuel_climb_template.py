@@ -25,7 +25,7 @@ import SUAVE
 from SUAVE.AEROCore_Additional.energy_climb_trajectory_const_mass import minimum_fuel_to_climb_const_mass
 from SUAVE.AEROCore_Additional.fuel_specific_excess_power import fuel_specific_excess_power_range
 from SUAVE.AEROCore_Additional.plotting import *
-from SUAVE.AEROCore_Additional.aero_forces import construct_aero_map
+from SUAVE.AEROCore_Additional.aero_forces_steady_state import construct_aero_map
 
 from SUAVE.Core import Data
 
